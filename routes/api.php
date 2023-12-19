@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => '/v1'], function () {
+
+    Route::post('/orders/{order}/delay-reports', [DelayReportController::class, 'store']);
+
+    Route::prefix('delay-reports')->group(function () {
+        Route::post('assign', [DelayReportController::class, 'assign']);
+        Route::get('current-week', [DelayReportController::class, 'getCurrentWeekDelayReports']);
+    });
 });
